@@ -1,5 +1,8 @@
 name: Deploying Static File to S3 
-on: push 
+on:
+  push:
+    paths:
+      - "index.html"
 jobs:
   Deploy:
     runs-on: ubuntu-latest
