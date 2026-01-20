@@ -1,0 +1,21 @@
+name: Context_variables
+
+on: push
+
+jobs:
+  context-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Context Info
+        run: |
+          echo "Repo: ${{ github.repository }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "OS: ${{ runner.os }}"
+
+      - name: Initialize Version variable
+        id: version_step
+        run: echo "version=1.1" >> $GITHUB_OUTPUT
+
+      - name: Print version info
+        run: echo "Version is ${{ steps.version_step.outputs.version }}"
