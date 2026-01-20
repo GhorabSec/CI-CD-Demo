@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Running the intended main branch
-        if: github.ref == "refs/heads/main"
+        if: github.ref == 'refs/heads/main' 
         run: echo "Running this step"
       - name: Running another step
         run: echo "Hello from myside guys"
