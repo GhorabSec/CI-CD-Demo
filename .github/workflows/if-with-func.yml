@@ -1,5 +1,5 @@
-
 name: Nice IF example
+
 on:
   push:
     branches:
@@ -9,36 +9,40 @@ on:
 
 jobs:
   quality_checks:
-    if: startsWith(github.ref_name,'feature') && github.event_name == 'push'
+    if: startsWith(github.ref, 'refs/heads/feature/')
     runs-on: ubuntu-latest
     steps:
-      - name: Perform code quality_checks 
-        run: "Performing quality checks on the code"
+      - name: Perform code quality checks
+        run: echo "Performing quality checks on the code"
+
   dev_deploy:
-    if: github.ref_name == 'develop' && github.event_name == 'push' 
+    if: github.ref_name == 'develop'
     runs-on: ubuntu-latest
     steps:
       - name: Dev Deploy
         run: echo "Deploying the code into development environment"
+
   prod_deploy:
-    if: github.ref_name == 'main' && github.event_name == 'push'
+    if: github.ref_name == 'main'
     runs-on: ubuntu-latest
     steps:
-      - name: Production Deploy 
+      - name: Production Deploy
         run: echo "Deploying the code into production environment"
+
   success_notify:
-    needs: ['quality_checks','dev_deploy','prod_deploy']
-    if: always() && !failure() 
+    needs: [quality_checks, dev_deploy, prod_deploy]
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure')
     runs-on: ubuntu-latest
     steps:
-      - name: Notify Success 
+      - name: Notify Success
         run: echo "Success email sent to the team"
+
   failure_notify:
-    needs: ['quality_checks','dev_deploy','prod_deploy']
-    if: failure() 
+    needs: [quality_checks, dev_deploy, prod_deploy]
+    if: contains(needs.*.result, 'failure')
     runs-on: ubuntu-latest
     steps:
       - name: Notify failure
-        run: echo "failure email sent to the team"
-    
-
+        run: echo "Failure email sent to the team"
